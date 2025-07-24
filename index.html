@@ -333,6 +333,7 @@
             position: absolute;
             left: 0;
             font-weight: bold;
+            font-size: 1.2em;
         }
 
         /* Contact Section */
@@ -448,7 +449,7 @@
             /* Header Mobile */
             header {
                 margin-top: 80px;
-                padding: 4rem 0 3rem;
+                padding: 6rem 0 4rem;
                 background-attachment: scroll;
             }
 
@@ -519,7 +520,12 @@
 
             .service-features li {
                 font-size: 0.95rem;
-                padding: 0.3rem 0;
+                padding: 0.4rem 0;
+                padding-left: 2rem;
+            }
+
+            .service-features li::before {
+                left: 0.5rem;
             }
 
             .service-image {
@@ -630,7 +636,7 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="#hero" class="nav-logo">
+            <a href="#" class="nav-logo">
                 <img src="https://i.ibb.co/RGmRw9zf/prime-png.jpg" alt="PRIME Logo">
             </a>
             <ul class="nav-links">
@@ -658,7 +664,7 @@
     </div>
 
     <!-- Header -->
-    <header>
+    <header id="home">
         <div class="container">
             <div class="header-content">
                 <h1 class="logo">PRIME</h1>
@@ -780,6 +786,15 @@
             if (!navContainer.contains(event.target) && mobileMenu.classList.contains('active')) {
                 closeMobileMenu();
             }
+        });
+
+        // Logo click functionality
+        document.querySelector('.nav-logo').addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
 
         // Close mobile menu on window resize
