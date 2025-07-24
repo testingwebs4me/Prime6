@@ -390,7 +390,7 @@
 
         /* Smooth scrolling */
         html {
-            scroll-behavior: smooth;
+            scroll-behavior: auto;
         }
 
         /* Custom animations */
@@ -446,16 +446,24 @@
                 height: 60px;
             }
 
-            /* Header Mobile */
+            /* Mobile Menu */
+            .mobile-menu {
+                top: 80px;
+            }
+
+            /* Header Mobile - FIXED */
             header {
-                margin-top: 80px;
-                padding: 2rem 0 15rem;
+                margin-top: 80px; /* Reduced to match mobile nav height */
+                padding: 4rem 0 4rem; /* Reduced padding */
                 background-attachment: scroll;
-                min-height: calc(100vh - 80px);
+                min-height: calc(100vh - 80px); /* Ensure proper height calculation */
+                display: flex;
+                align-items: center;
             }
 
             .header-content {
                 padding: 0 15px;
+                width: 100%;
             }
 
             .logo {
@@ -586,6 +594,12 @@
                 padding: 1.5rem;
             }
 
+            /* Header Extra Small Mobile - FIXED */
+            header {
+                margin-top: 70px; /* Match extra small nav height */
+                padding: 3rem 0 3rem; /* Further reduced padding */
+            }
+
             .logo {
                 font-size: 2rem;
                 letter-spacing: 2px;
@@ -632,7 +646,7 @@
             }
         }
     </style>
-</head>
+    </head>
 <body>
     <!-- Navigation -->
     <nav>
@@ -762,10 +776,28 @@
     </section>
 
     <script>
-        // Simple scroll restoration prevention only
-        if (history.scrollRestoration) {
+        // Only prevent initial auto-scroll on page load
+        let pageJustLoaded = true;
+        
+        // Prevent initial auto-scroll
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        
+        // Disable scroll restoration
+        if ('scrollRestoration' in history) {
             history.scrollRestoration = 'manual';
         }
+
+        // Allow normal scrolling after a short delay
+        setTimeout(function() {
+            pageJustLoaded = false;
+        }, 500);
+
+        // Block any auto-scrolling on page unload/reload
+        window.addEventListener('beforeunload', function() {
+            window.scrollTo(0, 0);
+        });
 
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
@@ -808,6 +840,37 @@
             if (window.innerWidth > 768) {
                 closeMobileMenu();
             }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                
+                // Only prevent default for logo/home links
+                if (href === '#' || href === '#home') {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+                
+                // Allow normal anchor navigation for other links
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerOffset = 100; // Account for fixed navigation
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
         });
     </script>
 </body>
