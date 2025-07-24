@@ -449,8 +449,9 @@
             /* Header Mobile */
             header {
                 margin-top: 80px;
-                padding: 6rem 0 4rem;
+                padding: 8rem 0 6rem;
                 background-attachment: scroll;
+                min-height: 100vh;
             }
 
             .header-content {
@@ -761,6 +762,18 @@
     </section>
 
     <script>
+        // Force scroll to top on page load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 0);
+            }, 100);
+        });
+
+        // Also handle page refresh
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
             const menuToggle = document.querySelector('.mobile-menu-toggle');
