@@ -388,9 +388,9 @@
             font-size: 1.1rem;
         }
 
-        /* Smooth scrolling */
+        /* Smooth scrolling - DISABLED to prevent auto-scroll issues */
         html {
-            scroll-behavior: smooth;
+            /* scroll-behavior: smooth; */
         }
 
         /* Custom animations */
@@ -762,15 +762,24 @@
     </section>
 
     <script>
-        // Force scroll to top on page load - immediate and clean
-        document.addEventListener('DOMContentLoaded', function() {
-            window.scrollTo(0, 0);
-        });
-
-        // Also handle page refresh
+        // Only prevent scroll restoration, no forced scrolling
         if (history.scrollRestoration) {
             history.scrollRestoration = 'manual';
         }
+
+        // Add smooth scrolling for navigation links only
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
 
         function toggleMobileMenu() {
             const mobileMenu = document.getElementById('mobileMenu');
